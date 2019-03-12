@@ -59,6 +59,14 @@ inputs:
       is_expand: true
       is_required: false
       value_options: []
+  - configuration: "debug"
+    opts:
+      title: Configuration
+      description: |
+        Two build configurations, Debug (default) and Release.
+      value_options:
+        - "debug"
+        - "release"
   - build_tests: "no"
     opts:
       title: Build tests
@@ -75,3 +83,7 @@ inputs:
       value_options:
         - "yes"
         - "no"
+outputs:
+  - BITRISE_EXECUTABLE_PATH:
+    opts:
+      title: The executable path

@@ -20,7 +20,8 @@ type BuildCommandModel struct {
 	buildPath string
 
 	// Build Settings
-	buildTests bool
+	configuration string
+	buildTests    bool
 
 	// Options
 	disableSandbox bool
@@ -34,6 +35,12 @@ func NewBuildCommand() *BuildCommandModel {
 // SetBuildPath ...
 func (c *BuildCommandModel) SetBuildPath(buildPath string) *BuildCommandModel {
 	c.buildPath = buildPath
+	return c
+}
+
+// SetConfiguration ...
+func (c *BuildCommandModel) SetConfiguration(configuration string) *BuildCommandModel {
+	c.configuration = configuration
 	return c
 }
 
@@ -80,6 +87,10 @@ func (c *BuildCommandModel) Run() error {
 func (c *BuildCommandModel) cmdSlice() []string {
 	slice := []string{toolName}
 	slice = append(slice, "build")
+
+	if c.configuration != "" {
+		slice = append(slice, "--configuration", c.configuration)
+	}
 
 	if c.buildPath != "" {
 		slice = append(slice, "--build-path", c.buildPath)

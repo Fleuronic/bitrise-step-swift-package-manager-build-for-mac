@@ -33,8 +33,14 @@ workflows:
       - path::./:
           title: Step Test
           inputs:
+            - configuration: "debug"
             - build_tests: "yes"
             - disable_sandbox: "no"
+      - script:
+          title: output test
+          is_always_run: true
+          inputs:
+            - content: 'echo "BITRISE_EXECUTABLE_PATH: ${BITRISE_EXECUTABLE_PATH}"'
   go-tests:
     steps:
       - script:

@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bitrise-io/go-utils/command"
 	"github.com/bitrise-io/go-utils/log"
 	"github.com/kitasuke/go-swift/swift"
 	"github.com/kitasuke/go-swift/utility"
@@ -12,6 +13,7 @@ import (
 
 const (
 	BuildPathEnvKey      = "build_path"
+	ConfigurationEnvKey  = "configuration"
 	BuildTestsEnvKey     = "build_tests"
 	DisableSandboxEnvKey = "disable_sandbox"
 )
@@ -22,6 +24,7 @@ type ConfigModel struct {
 	BuildPath string
 
 	// Build Run Configs
+	configuration  string
 	buildTests     string
 	disableSandbox string
 }
@@ -34,6 +37,7 @@ func (configs ConfigModel) print() {
 
 	fmt.Println()
 	log.Infof("Build Run Configs:")
+	log.Printf("- Configuration: %s", configs.configuration)
 	log.Printf("- BuildTests: %s", configs.buildTests)
 	log.Printf("- DisableSandbox: %s", configs.disableSandbox)
 }
@@ -43,13 +47,18 @@ func createConfigsModelFromEnvs() ConfigModel {
 		// Project Parameters
 		BuildPath: os.Getenv(BuildPathEnvKey),
 
-		// Test Run Configs
+		// Build Run Configs
+		configuration:  os.Getenv(ConfigurationEnvKey),
 		buildTests:     os.Getenv(BuildTestsEnvKey),
 		disableSandbox: os.Getenv(DisableSandboxEnvKey),
 	}
 }
 
 func (configs ConfigModel) validate() error {
+	if err := validateRequiredInputWithOptions(configs.configuration, ConfigurationEnvKey, []string{"debug", "release"}); err != nil {
+		return err
+	}
+
 	if err := validateRequiredInputWithOptions(configs.buildTests, BuildTestsEnvKey, []string{"yes", "no"}); err != nil {
 		return err
 	}
@@ -64,6 +73,18 @@ func (configs ConfigModel) validate() error {
 //--------------------
 // Functions
 //--------------------
+
+// ExportEnvironmentWithEnvman ...
+func ExportEnvironmentWithEnvman(keyStr, valueStr string) error {
+	return command.New("envman", "add", "--key", keyStr).SetStdin(strings.NewReader(valueStr)).Run()
+}
+
+func exportExecutablePath(buildPath, configuration string) {
+	path := fmt.Sprintf("%s/%s", buildPath, configuration)
+	if err := ExportEnvironmentWithEnvman("BITRISE_EXECUTABLE_PATH", path); err != nil {
+		log.Warnf("Failed to export: BITRISE_EXECUTABLE_PATH, error: %s", err)
+	}
+}
 
 func validateRequiredInput(value, key string) error {
 	if value == "" {
@@ -126,6 +147,7 @@ func main() {
 	// setup CommandModel for test
 	buildCommandModel := swift.NewBuildCommand()
 	buildCommandModel.SetBuildPath(configs.BuildPath)
+	buildCommandModel.SetConfiguration(configs.configuration)
 	buildCommandModel.SetBuildTests(buildTests)
 	buildCommandModel.SetDisableSandbox(disableSandbox)
 
@@ -134,4 +156,6 @@ func main() {
 	if err := buildCommandModel.Run(); err != nil {
 		failf("Build failed, error: %s", err)
 	}
+
+	exportExecutablePath(configs.BuildPath, configs.configuration)
 }

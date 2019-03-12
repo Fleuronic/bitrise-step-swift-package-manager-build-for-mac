@@ -17,7 +17,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8ff36366bbfed5fd93430f33359cfc780368349dac88b38ccf1116e76f17bfad"
+  digest = "1:fef4d6071a41c989f72c0c2f484bb8b88dc3bba9db28139321cee3d21ccd29d7"
   name = "github.com/kitasuke/go-swift"
   packages = [
     "models",
@@ -25,12 +25,13 @@
     "utility",
   ]
   pruneopts = ""
-  revision = "cce6587ea418884f4eb50b59e75574f0c570484b"
+  revision = "e12cbb9bc2edf19330de0e575620fab86e9cab90"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/bitrise-io/go-utils/command",
     "github.com/bitrise-io/go-utils/log",
     "github.com/kitasuke/go-swift/swift",
     "github.com/kitasuke/go-swift/utility",
