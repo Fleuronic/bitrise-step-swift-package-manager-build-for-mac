@@ -21,7 +21,7 @@ const (
 // ConfigModel ...
 type ConfigModel struct {
 	// Project Parameters
-	BuildPath string
+	buildPath string
 
 	// Build Run Configs
 	configuration  string
@@ -33,7 +33,7 @@ func (configs ConfigModel) print() {
 	fmt.Println()
 
 	log.Infof("Project Parameters:")
-	log.Printf("- BuildPath: %s", configs.BuildPath)
+	log.Printf("- BuildPath: %s", configs.buildPath)
 
 	fmt.Println()
 	log.Infof("Build Run Configs:")
@@ -45,7 +45,7 @@ func (configs ConfigModel) print() {
 func createConfigsModelFromEnvs() ConfigModel {
 	return ConfigModel{
 		// Project Parameters
-		BuildPath: os.Getenv(BuildPathEnvKey),
+		buildPath: os.Getenv(BuildPathEnvKey),
 
 		// Build Run Configs
 		configuration:  os.Getenv(ConfigurationEnvKey),
@@ -146,7 +146,7 @@ func main() {
 
 	// setup CommandModel for test
 	buildCommandModel := swift.NewBuildCommand()
-	buildCommandModel.SetBuildPath(configs.BuildPath)
+	buildCommandModel.SetBuildPath(configs.buildPath)
 	buildCommandModel.SetConfiguration(configs.configuration)
 	buildCommandModel.SetBuildTests(buildTests)
 	buildCommandModel.SetDisableSandbox(disableSandbox)
@@ -157,5 +157,5 @@ func main() {
 		failf("Build failed, error: %s", err)
 	}
 
-	exportExecutablePath(configs.BuildPath, configs.configuration)
+	exportExecutablePath(configs.buildPath, configs.configuration)
 }
