@@ -58,7 +58,6 @@ inputs:
         A build path, relative to the working directory.
       is_expand: true
       is_required: false
-      value_options: []
   - configuration: "debug"
     opts:
       title: Configuration
