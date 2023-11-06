@@ -10,6 +10,7 @@ import (
 /*
 swift test \
 	[--build-path <buildPath>] \
+	[--package-path <packagePath>] \
 	[--configuration <configuration>] \
 	[--skip-build] \
 	[--parallel] \
@@ -18,6 +19,7 @@ swift test \
 // TestCommandModel ...
 type TestCommandModel struct {
 	buildPath string
+	packagePath string
 
 	// Build Settings
 	skipBuild bool
@@ -34,6 +36,12 @@ func NewTestCommand() *TestCommandModel {
 // SetBuildPath ...
 func (c *TestCommandModel) SetBuildPath(buildPath string) *TestCommandModel {
 	c.buildPath = buildPath
+	return c
+}
+
+// SetPackagePath ...
+func (c *TestCommandModel) SetPackagePath(packagePath string) *TestCommandModel {
+	c.packagePath = packagePath
 	return c
 }
 
@@ -83,6 +91,10 @@ func (c *TestCommandModel) cmdSlice() []string {
 
 	if c.buildPath != "" {
 		slice = append(slice, "--build-path", c.buildPath)
+	}
+
+	if c.packagePath != "" {
+		slice = append(slice, "--package-path", c.packagePath)
 	}
 
 	if c.skipBuild {

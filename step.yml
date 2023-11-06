@@ -29,7 +29,7 @@ host_os_tags:
 # https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
 #
 project_type_tags:
-   - macos
+  - macos
 
 # Type tags are used for categorizing steps, for easier step discovery in Step Libraries.
 # You can find more information about type tags in the Step Development Guideline:
@@ -56,6 +56,13 @@ inputs:
       title: Build path
       description: |
         A build path, relative to the working directory.
+      is_expand: true
+      is_required: true
+  - package_path: .
+    opts:
+      title: Package path
+      description: |
+        The package path, relative to the working directory.
       is_expand: true
       is_required: true
   - configuration: "debug"

@@ -10,6 +10,7 @@ import (
 /*
 swift build \
 	[--build-path <buildPath>] \
+	[--package-path <packagePath>] \
 	[--configuration <configuration>] \
 	[--build-tests]
 	[--disable-sandbox]
@@ -18,6 +19,7 @@ swift build \
 // BuildCommandModel ...
 type BuildCommandModel struct {
 	buildPath string
+	packagePath string
 
 	// Build Settings
 	configuration string
@@ -35,6 +37,12 @@ func NewBuildCommand() *BuildCommandModel {
 // SetBuildPath ...
 func (c *BuildCommandModel) SetBuildPath(buildPath string) *BuildCommandModel {
 	c.buildPath = buildPath
+	return c
+}
+
+// SetBuildPath ...
+func (c *BuildCommandModel) SetPackagePath(buildPath string) *BuildCommandModel {
+	c.packagePath = packagePath
 	return c
 }
 
@@ -94,6 +102,10 @@ func (c *BuildCommandModel) cmdSlice() []string {
 
 	if c.buildPath != "" {
 		slice = append(slice, "--build-path", c.buildPath)
+	}
+
+	if c.packagePath != "" {
+		slice = append(slice, "--package-path", c.buildPath)
 	}
 
 	if c.buildTests {

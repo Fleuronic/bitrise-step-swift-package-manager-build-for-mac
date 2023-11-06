@@ -13,6 +13,7 @@ import (
 
 const (
 	BuildPathEnvKey      = "build_path"
+	PackagePathEnvKey    = "package_path"
 	ConfigurationEnvKey  = "configuration"
 	BuildTestsEnvKey     = "build_tests"
 	DisableSandboxEnvKey = "disable_sandbox"
@@ -22,6 +23,7 @@ const (
 type ConfigModel struct {
 	// Project Parameters
 	buildPath string
+	packagePath string
 
 	// Build Run Configs
 	configuration  string
@@ -34,6 +36,7 @@ func (configs ConfigModel) print() {
 
 	log.Infof("Project Parameters:")
 	log.Printf("- BuildPath: %s", configs.buildPath)
+	log.Printf("- PackagePath: %s", configs.packagePath)
 
 	fmt.Println()
 	log.Infof("Build Run Configs:")
@@ -46,6 +49,7 @@ func createConfigsModelFromEnvs() ConfigModel {
 	return ConfigModel{
 		// Project Parameters
 		buildPath: os.Getenv(BuildPathEnvKey),
+		packagePath: os.Getenv(PackagePathEnvKey),
 
 		// Build Run Configs
 		configuration:  os.Getenv(ConfigurationEnvKey),
@@ -147,6 +151,7 @@ func main() {
 	// setup CommandModel for test
 	buildCommandModel := swift.NewBuildCommand()
 	buildCommandModel.SetBuildPath(configs.buildPath)
+	buildCommandModel.SetPackagePath(configs.packagePath)
 	buildCommandModel.SetConfiguration(configs.configuration)
 	buildCommandModel.SetBuildTests(buildTests)
 	buildCommandModel.SetDisableSandbox(disableSandbox)
