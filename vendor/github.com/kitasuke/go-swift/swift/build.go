@@ -40,8 +40,8 @@ func (c *BuildCommandModel) SetBuildPath(buildPath string) *BuildCommandModel {
 	return c
 }
 
-// SetBuildPath ...
-func (c *BuildCommandModel) SetPackagePath(buildPath string) *BuildCommandModel {
+// SetPackagePath ...
+func (c *BuildCommandModel) SetPackagePath(packagePath string) *BuildCommandModel {
 	c.packagePath = packagePath
 	return c
 }
@@ -105,7 +105,7 @@ func (c *BuildCommandModel) cmdSlice() []string {
 	}
 
 	if c.packagePath != "" {
-		slice = append(slice, "--package-path", c.buildPath)
+		slice = append(slice, "--package-path", c.packagePath)
 	}
 
 	if c.buildTests {
